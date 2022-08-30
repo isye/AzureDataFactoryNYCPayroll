@@ -1,0 +1,9 @@
+{
+	"name": "iadatafactoryp5",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "531f554e-9ce4-485e-9580-71bd1f8a2836",
+		"tenantId": "9b7cbd77-6d6b-4879-8aba-63d7dfb18472"
+	}
+}

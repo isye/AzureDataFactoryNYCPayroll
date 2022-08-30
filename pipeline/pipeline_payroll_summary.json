@@ -1,0 +1,52 @@
+{
+	"name": "pipeline_payroll_summary",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data flow aggregate to generate payroll summary",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "df_data_aggregate",
+						"type": "DataFlowReference",
+						"parameters": {
+							"fiscalYear": "2021"
+						}
+					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "AzureDataLakeStorageSynapse",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "iafs/nycpayrollstaging"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"AgencyName": {
+				"type": "string"
+			},
+			"FiscalYear": {
+				"type": "int"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-08-30T18:18:36Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
