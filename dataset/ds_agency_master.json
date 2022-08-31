@@ -2,7 +2,7 @@
 	"name": "ds_agency_master",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorageAdlsNycPayroll",
+			"referenceName": "AzureDataLakeStorage1",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
