@@ -7,13 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "iadatafactoryp5"
 		},
-		"AzureDataLakeStorageAdlsNycPayroll_accountKey": {
+		"AzureDataLakeStorage1_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorageAdlsNycPayroll'"
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage1'"
 		},
-		"AzureDataLakeStorageSynapse_accountKey": {
+		"AzureDataLakeStorage_2_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorageSynapse'"
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage_2'"
 		},
 		"AzureSqlDatabase1_connectionString": {
 			"type": "secureString",
@@ -23,13 +23,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics1'"
 		},
-		"AzureDataLakeStorageAdlsNycPayroll_properties_typeProperties_url": {
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://adlsnycpayrollisyea.dfs.core.windows.net/"
 		},
-		"AzureDataLakeStorageSynapse_properties_typeProperties_url": {
+		"AzureDataLakeStorage_2_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://iadatalakeacct.dfs.core.windows.net/"
+			"defaultValue": "https://iaproject5.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -58,11 +58,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"AzureDataLakeStorageAdlsNycPayroll_accountKey": {
-						"value": "[parameters('AzureDataLakeStorageAdlsNycPayroll_accountKey')]"
+					"AzureDataLakeStorage1_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
-					"AzureDataLakeStorageSynapse_accountKey": {
-						"value": "[parameters('AzureDataLakeStorageSynapse_accountKey')]"
+					"AzureDataLakeStorage_2_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage_2_accountKey')]"
 					},
 					"AzureSqlDatabase1_connectionString": {
 						"value": "[parameters('AzureSqlDatabase1_connectionString')]"
@@ -70,11 +70,11 @@
 					"AzureSynapseAnalytics1_connectionString": {
 						"value": "[parameters('AzureSynapseAnalytics1_connectionString')]"
 					},
-					"AzureDataLakeStorageAdlsNycPayroll_properties_typeProperties_url": {
-						"value": "[parameters('AzureDataLakeStorageAdlsNycPayroll_properties_typeProperties_url')]"
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
 					},
-					"AzureDataLakeStorageSynapse_properties_typeProperties_url": {
-						"value": "[parameters('AzureDataLakeStorageSynapse_properties_typeProperties_url')]"
+					"AzureDataLakeStorage_2_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage_2_properties_typeProperties_url')]"
 					}
 				}
 			},

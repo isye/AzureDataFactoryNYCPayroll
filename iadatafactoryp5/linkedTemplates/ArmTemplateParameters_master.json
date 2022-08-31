@@ -5,10 +5,10 @@
 		"factoryName": {
 			"value": "iadatafactoryp5"
 		},
-		"AzureDataLakeStorageAdlsNycPayroll_accountKey": {
+		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
-		"AzureDataLakeStorageSynapse_accountKey": {
+		"AzureDataLakeStorage_2_accountKey": {
 			"value": ""
 		},
 		"AzureSqlDatabase1_connectionString": {
@@ -17,11 +17,11 @@
 		"AzureSynapseAnalytics1_connectionString": {
 			"value": ""
 		},
-		"AzureDataLakeStorageAdlsNycPayroll_properties_typeProperties_url": {
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://adlsnycpayrollisyea.dfs.core.windows.net/"
 		},
-		"AzureDataLakeStorageSynapse_properties_typeProperties_url": {
-			"value": "https://iadatalakeacct.dfs.core.windows.net/"
+		"AzureDataLakeStorage_2_properties_typeProperties_url": {
+			"value": "https://iaproject5.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"value": ""
