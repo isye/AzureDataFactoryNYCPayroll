@@ -13,343 +13,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/df_employee_file_to_synapse')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_emp_master",
-								"type": "DatasetReference"
-							},
-							"name": "srcEmployeeFile"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_synapse_NYC_Payroll_EMP_MD",
-								"type": "DatasetReference"
-							},
-							"name": "synapseEmpMaster"
-						}
-					],
-					"transformations": [],
-					"scriptLines": [
-						"source(output(",
-						"          EmployeeID as string,",
-						"          LastName as string,",
-						"          FirstName as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> srcEmployeeFile",
-						"srcEmployeeFile sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          EmployeeID as string,",
-						"          LastName as string,",
-						"          FirstName as string",
-						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     staged: true,",
-						"     allowCopyCommand: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> synapseEmpMaster"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_payroll_file_to_SQL')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_nycpayroll_2021",
-								"type": "DatasetReference"
-							},
-							"name": "srcPayrollData"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_nycpayroll_2021",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSqlPayrollData"
-						}
-					],
-					"transformations": [
-						{
-							"name": "payrollWithDerivedAgencyStartDate"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          FiscalYear as string,",
-						"          PayrollNumber as string,",
-						"          AgencyCode as string,",
-						"          AgencyName as string,",
-						"          EmployeeID as string,",
-						"          LastName as string,",
-						"          FirstName as string,",
-						"          AgencyStartDate as string,",
-						"          WorkLocationBorough as string,",
-						"          TitleCode as string,",
-						"          TitleDescription as string,",
-						"          LeaveStatusasofJune30 as string,",
-						"          BaseSalary as string,",
-						"          PayBasis as string,",
-						"          RegularHours as string,",
-						"          RegularGrossPaid as string,",
-						"          OTHours as string,",
-						"          TotalOTPaid as string,",
-						"          TotalOtherPay as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     limit: 10,",
-						"     ignoreNoFilesFound: false) ~> srcPayrollData",
-						"srcPayrollData derive(AgencyStartDateNew = toDate(AgencyStartDate, 'MM/dd/yyyy')) ~> payrollWithDerivedAgencyStartDate",
-						"payrollWithDerivedAgencyStartDate sink(allowSchemaDrift: true,",
-						"     validateSchema: true,",
-						"     input(",
-						"          FiscalYear as integer,",
-						"          PayrollNumber as integer,",
-						"          AgencyID as string,",
-						"          AgencyName as string,",
-						"          EmployeeID as string,",
-						"          LastName as string,",
-						"          FirstName as string,",
-						"          AgencyStartDate as date,",
-						"          WorkLocationBorough as string,",
-						"          TitleCode as string,",
-						"          TitleDescription as string,",
-						"          LeaveStatusasofJune30 as string,",
-						"          BaseSalary as double,",
-						"          PayBasis as string,",
-						"          RegularHours as double,",
-						"          RegularGrossPaid as double,",
-						"          OTHours as double,",
-						"          TotalOTPaid as double,",
-						"          TotalOtherPay as double",
-						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError',",
-						"     mapColumn(",
-						"          AgencyName,",
-						"          EmployeeID,",
-						"          LastName,",
-						"          FirstName,",
-						"          WorkLocationBorough,",
-						"          TitleCode,",
-						"          TitleDescription,",
-						"          LeaveStatusasofJune30,",
-						"          PayBasis,",
-						"          FiscalYear,",
-						"          PayrollNumber,",
-						"          BaseSalary,",
-						"          AgencyStartDate = AgencyStartDateNew,",
-						"          RegularHours,",
-						"          RegularGrossPaid,",
-						"          OTHours,",
-						"          TotalOTPaid,",
-						"          TotalOtherPay,",
-						"          AgencyID = AgencyCode",
-						"     )) ~> sinkSqlPayrollData"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_payroll_sql_to_synapse')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_sql_nycpayroll_2021",
-								"type": "DatasetReference"
-							},
-							"name": "srcPayrollSql"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_synapse_NYC_Payroll_Data",
-								"type": "DatasetReference"
-							},
-							"name": "sinkPayrollSynapse"
-						}
-					],
-					"transformations": [],
-					"scriptLines": [
-						"source(output(",
-						"          FiscalYear as integer,",
-						"          PayrollNumber as integer,",
-						"          AgencyID as string,",
-						"          AgencyName as string,",
-						"          EmployeeID as string,",
-						"          LastName as string,",
-						"          FirstName as string,",
-						"          AgencyStartDate as date,",
-						"          WorkLocationBorough as string,",
-						"          TitleCode as string,",
-						"          TitleDescription as string,",
-						"          LeaveStatusasofJune30 as string,",
-						"          BaseSalary as double,",
-						"          PayBasis as string,",
-						"          RegularHours as double,",
-						"          RegularGrossPaid as double,",
-						"          OTHours as double,",
-						"          TotalOTPaid as double,",
-						"          TotalOtherPay as double",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> srcPayrollSql",
-						"srcPayrollSql sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          FiscalYear as integer,",
-						"          PayrollNumber as integer,",
-						"          AgencyID as string,",
-						"          AgencyName as string,",
-						"          EmployeeID as string,",
-						"          LastName as string,",
-						"          FirstName as string,",
-						"          AgencyStartDate as date,",
-						"          WorkLocationBorough as string,",
-						"          TitleCode as string,",
-						"          TitleDescription as string,",
-						"          LeaveStatusasofJune30 as string,",
-						"          BaseSalary as double,",
-						"          PayBasis as string,",
-						"          RegularHours as double,",
-						"          RegularGrossPaid as double,",
-						"          OTHours as double,",
-						"          TotalOTPaid as double,",
-						"          TotalOtherPay as double",
-						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     staged: true,",
-						"     allowCopyCommand: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError',",
-						"     mapColumn(",
-						"          FiscalYear,",
-						"          PayrollNumber,",
-						"          AgencyID,",
-						"          AgencyName,",
-						"          EmployeeID,",
-						"          LastName,",
-						"          FirstName,",
-						"          AgencyStartDate,",
-						"          WorkLocationBorough,",
-						"          TitleCode,",
-						"          TitleDescription,",
-						"          LeaveStatusasofJune30,",
-						"          BaseSalary,",
-						"          PayBasis,",
-						"          RegularHours,",
-						"          RegularGrossPaid,",
-						"          OTHours,",
-						"          TotalOTPaid,",
-						"          TotalOtherPay",
-						"     )) ~> sinkPayrollSynapse"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/df_title_file_to_synapse')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "ds_title_master",
-								"type": "DatasetReference"
-							},
-							"name": "srcTitleMaster"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "ds_synapse_NYC_Payroll_TITLE_MD",
-								"type": "DatasetReference"
-							},
-							"name": "sinkSynapseTitleMaster"
-						}
-					],
-					"transformations": [],
-					"scriptLines": [
-						"source(output(",
-						"          TitleCode as string,",
-						"          TitleDescription as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> srcTitleMaster",
-						"srcTitleMaster sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          TitleCode as string,",
-						"          TitleDescription as string",
-						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     staged: true,",
-						"     allowCopyCommand: true,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sinkSynapseTitleMaster"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/pipeline_employee_master_to_synapse')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -399,9 +62,7 @@
 				"annotations": [],
 				"lastPublishTime": "2022-08-30T15:31:18Z"
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_employee_file_to_synapse')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pipeline_load_2021_payroll_into_sqlDB')]",
@@ -447,9 +108,7 @@
 				"annotations": [],
 				"lastPublishTime": "2022-08-30T15:12:31Z"
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_payroll_file_to_SQL')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pipeline_load_agency_master_to_synapse')]",
@@ -680,11 +339,7 @@
 				"annotations": [],
 				"lastPublishTime": "2022-08-30T15:57:33Z"
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_employee_file_to_synapse')]",
-				"[concat(variables('factoryId'), '/dataflows/df_title_file_to_synapse')]",
-				"[concat(variables('factoryId'), '/dataflows/df_payroll_sql_to_synapse')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pipeline_load_current_year_data_from_sql_to_synapse')]",
@@ -735,59 +390,6 @@
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-08-30T15:50:00Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_payroll_sql_to_synapse')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline_load_employee_csv_to_synapse')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Data flow to load employee csv to synapse",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "df_employee_csv_to_synapse",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"srcEmployeeCsv": {},
-									"sinkEmployeeMasterSynapse": {}
-								}
-							},
-							"staging": {
-								"linkedService": {
-									"referenceName": "AzureDataLakeStorage1",
-									"type": "LinkedServiceReference"
-								},
-								"folderPath": "adlsnycpayroll-isye-a/dirstaging"
-							},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -841,9 +443,7 @@
 				"annotations": [],
 				"lastPublishTime": "2022-08-30T15:38:27Z"
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/df_title_file_to_synapse')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pipeline_payroll_summary')]",
