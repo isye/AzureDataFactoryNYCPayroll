@@ -24,10 +24,10 @@
 					},
 					"staging": {
 						"linkedService": {
-							"referenceName": "AzureDataLakeStorageSynapse",
+							"referenceName": "AzureDataLakeStorage1",
 							"type": "LinkedServiceReference"
 						},
-						"folderPath": "iafs/nycpayrollstaging"
+						"folderPath": "adlsnycpayroll-isye-a/dirstaging"
 					},
 					"compute": {
 						"coreCount": 8,
