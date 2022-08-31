@@ -2,7 +2,7 @@
 	"name": "ds_nycpayroll_2021",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "AzureDataLakeStorageAdlsNycPayroll",
+			"referenceName": "AzureDataLakeStorage1",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
